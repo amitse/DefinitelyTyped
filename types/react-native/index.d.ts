@@ -10,6 +10,7 @@
 //                 Manuel Alabor <https://github.com/swissmanu>
 //                 Michele Bombardi <https://github.com/bm-software>
 //                 Tanguy Krotoff <https://github.com/tkrotoff>
+//                 Amit Sengupta <https://github.com/amitse>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.6
 
@@ -4118,6 +4119,49 @@ export interface VirtualizedListProps<ItemT> extends ScrollViewProps {
      * chance that fast scrolling may reveal momentary blank areas of unrendered content.
      */
     windowSize?: number;
+}
+
+
+export class VirtualizedList<ItemT> extends React.Component<VirtualizedListProps<ItemT>> {
+
+    /**
+     * Scrolls to the end of the content. May be janky without `getItemLayout` prop.
+     */
+    scrollToEnd: (params?: { animated?: boolean }) => void;
+
+    /**
+     * Scrolls to the item at the specified index such that it is positioned in the viewable area
+     * such that viewPosition 0 places it at the top, 1 at the bottom, and 0.5 centered in the middle.
+     * Cannot scroll to locations outside the render window without specifying the getItemLayout prop.
+     */
+    scrollToIndex: (params: { animated?: boolean; index: number; viewOffset?: number; viewPosition?: number }) => void;
+
+    /**
+     * Requires linear scan through data - use `scrollToIndex` instead if possible.
+     * May be janky without `getItemLayout` prop.
+     */
+    scrollToItem: (params: { animated?: boolean; item: ItemT; viewPosition?: number }) => void;
+
+    /**
+     * Scroll to a specific content pixel offset, like a normal `ScrollView`.
+     * Param offset expects the offset to scroll to. In case of horizontal is true, the offset is the x-value,
+     * in any other case the offset is the y-value.
+     * Param animated (true by default) defines whether the list should do an animation while scrolling.
+     */
+    scrollToOffset: (params: { animated?: boolean; offset: number }) => void;
+
+    /**
+     * Tells the list an interaction has occured, which should trigger viewability calculations,
+     * e.g. if waitForInteractions is true and the user has not scrolled. This is typically called
+     * by taps on items or by navigation actions.
+     */
+    recordInteraction: () => void;
+
+     /**
+     * Displays the scroll indicators momentarily.
+     */
+    flashScrollIndicators: () => void;
+
 }
 
 /**
